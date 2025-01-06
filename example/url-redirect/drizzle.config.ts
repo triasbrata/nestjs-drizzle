@@ -3,21 +3,21 @@ import { defineConfig } from 'drizzle-kit';
 
 config({ path: '.env' });
 
-export default defineConfig({
-  schema: ['./src/database/url.entity.ts'],
-  out: './migrations',
-  dialect: 'sqlite',
-  dbCredentials: {
-    url: 'file:url.db',
-  },
-});
-
 // export default defineConfig({
 //   schema: ['./src/database/url.entity.ts'],
 //   out: './migrations',
 //   dialect: 'sqlite',
 //   dbCredentials: {
-//     url: process.env.TURSO_URL!,
-//     authToken: process.env.TURSO_TOKEN!,
+//     url: 'file:url.db',
 //   },
 // });
+
+export default defineConfig({
+  schema: ['./src/database/url.entity.ts'],
+  out: './migrations',
+  dialect: 'turso',
+  dbCredentials: {
+    url: process.env.TURSO_URL!,
+    authToken: process.env.TURSO_TOKEN!,
+  },
+});
