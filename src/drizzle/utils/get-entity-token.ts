@@ -4,6 +4,6 @@ export const getEntityName = (entity: Table): string => {
   return entity[Symbol.for('drizzle:Name')];
 };
 
-export const getEntityToken = (entity: Table) => {
-  return `drizzle_entity:${getEntityName(entity)}`;
+export const getEntityToken = (entity: Table, connection: string) => {
+  return `drizzle_entity:${connection}:${getEntityName(entity)}`;
 };

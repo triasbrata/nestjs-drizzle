@@ -6,13 +6,13 @@ import { getClientToken } from './get-client-token';
 import { getEntityToken } from './get-entity-token';
 
 export const createEntityProviders = (entities: Table[], name: string) =>
-  entities.map((entity): { provider: Provider; token: string } => {
-    const token = getEntityToken(entity);
+  entities.map((entity): { provider: Provider; provide: string } => {
+    const provide = getEntityToken(entity, name);
 
     return {
-      token,
+      provide,
       provider: {
-        provide: getEntityToken(entity),
+        provide,
         useFactory: (
           drizzleClient: DrizzleDatabase<'sqlite', { [key: string]: Table }>,
         ) => {

@@ -41,7 +41,7 @@ export class DrizzleModule extends ConfigurableDrizzleModule {
     return {
       module: DrizzleModule,
       providers: entityProviders.map(({ provider }) => provider),
-      exports: entityProviders.map(({ token }) => token),
+      exports: entityProviders.map(({ provide }) => provide),
     };
   }
 }
