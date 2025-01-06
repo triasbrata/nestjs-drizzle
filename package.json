@@ -8,7 +8,6 @@
     "name": "sixaphone",
     "url": "https://github.com/sixaphone"
   },
-  "private": false,
   "license": "ISC",
   "scripts": {
     "build": "nest build",
