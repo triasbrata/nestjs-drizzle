@@ -1,6 +1,6 @@
 {
   "name": "@sixaphone/nestjs-drizzle",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NestJS Drizzle is a simple and lightweight NestJS starter kit with a basic structure and configuration to help you kickstart your next project.",
   "main": "dist/index.js",
   "author": {

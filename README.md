@@ -24,76 +24,161 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A module for using drizzle-orm in NestJS
 
 ## Project setup
 
 ```bash
-$ yarn install
+$ npm i @sixaphone/nestjs-drizzle
 ```
 
-## Compile and run the project
+## Register connections
 
-```bash
-# development
-$ yarn run start
+```ts
+import { Module } from '@nestjs/common';
+import { DrizzleModule } from '@sixaphone/nestjs-drizzle';
+import { schema } from './database/schema';
+import tursoConfig, { TursoConfig } from './config/turso.config';
+import { DBS } from './constants';
+import { ConfigModule } from '@nestjs/config';
 
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+@Module({
+  imports: [
+    // local with custom name
+    DrizzleModule.forRoot({
+      type: 'sqlite',
+      name: DBS.LOCAL,
+      url: 'file:project.db',
+      schema,
+    }),
+    // local with default name
+    DrizzleModule.forRoot({
+      type: 'sqlite',
+      url: 'file:defaukt_db.db',
+      schema,
+    }),
+    // remote turso with custom name
+    DrizzleModule.forRootAsync({
+      name: DBS.TURSO,
+      useFactory: (tursoConfig: TursoConfig) => {
+        return {
+          type: 'sqlite',
+          url: tursoConfig.databaseUrl!,
+          authToken: tursoConfig.authToken!,
+          schema,
+        };
+      },
+      imports: [ConfigModule.forFeature(tursoConfig)],
+      inject: [tursoConfig.KEY],
+    }),
+    ConfigModule.forRoot({}),
+  ],
+})
+export class AppModule {}
 ```
 
-## Run tests
+## Add Entities for feature
 
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```ts
+@Module({
+  imports: [
+    // for local named
+    DrizzleModule.forFeature({
+      entities: [users],
+      name: DBS.LOCAL,
+    }),
+    // for local default
+    DrizzleModule.forFeature({
+      entities: [users],
+    }),
+    // for remote named
+    DrizzleModule.forFeature({
+      entities: [users],
+      name: DBS.TURSO,
+    }),
+  ],
+  providers: [MyService],
+  controllers: [MyController],
+})
+export class MyModule {}
 ```
 
-## Deployment
+## Usage
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+You can choose to either use the client or a entity repository. Using the client will give full access to the underlying drizzle client connection, while the repository will limit the functionality.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
-```bash
-$ yarn install -g mau
-$ mau deploy
+### Using Client
+
+```ts
+import { Injectable } from '@nestjs/common';
+import { DrizzleDatabase, InjectClient } from '@sixaphone/nestjs-drizzle';
+
+@Injectable()
+export class UserService {
+  constructor(
+    // inject the name here or leave empty for default
+    @InjectClient('local')
+    private readonly drizzleLocal: DrizzleDatabase<'sqlite', Schema>,
+  ) {}
+
+  public async createUser(name: string) {
+    const user = await this.drizzleLocal.transaction((tx) => {
+      return tx
+        .insert(urls)
+        .values({
+          name,
+        })
+        .returning();
+    });
+
+    return user;
+  }
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Resources
+### Using repository
 
-Check out a few resources that may come in handy when working with NestJS:
+```ts
+import { Injectable } from '@nestjs/common';
+import { DrizzleRepository, InjectRepository } from '@sixaphone/nestjs-drizzle';
+import { eq } from 'drizzle-orm';
+import { users } from 'src/database/user.entity';
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+@Injectable()
+export class UserService {
+  constructor(
+    // inject the name here or leave empty for default
+    @InjectRepository(users, 'local')
+    private readonly userRepository: DrizzleRepository<
+      Schema,
+      'users',
+      'sqlite'
+    >,
+  ) {}
+
+  public async createUser(name: string) {
+    const [user] = await this.userRepository.insert({
+      name
+    });
+
+    return user;
+  }
+
+  public async getByName(name: string) {
+    // select user by name and only take name field 
+    // select name from users where name = $1
+    const [user] = await this.userRepository.selectWhere(eq(users.name, name), {name: users.name});
+
+    // or
+    const [user] = await this.userRepository.select({name: users.name}).where(eq(users.name, name));
+
+    return user;
+  }
+}
+```
 
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
