@@ -13,7 +13,7 @@ import { DEFAULT_CLIENT_TOKEN } from './drizzle.constants';
 @Module({})
 export class DrizzleModule extends ConfigurableDrizzleModule {
   static forRoot(options: typeof OPTIONS_TYPE) {
-    const root = super.forRootAsync(options);
+    const root = super.forRoot(options);
     const providers = createProviders(options.name);
 
     return {

@@ -14,9 +14,9 @@ export const {
       name: 'default',
     },
     (definition, extras) => ({
-      ...definition,
       global: extras.isGlobal,
       name: extras.name,
+      ...definition,
     }),
   )
   .build();
