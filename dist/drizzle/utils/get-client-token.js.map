@@ -1,0 +1,1 @@
+{"version":3,"file":"get-client-token.js","sourceRoot":"","sources":["../../../src/drizzle/utils/get-client-token.ts"],"names":[],"mappings":";;;AAAA,4DAA4D;AAErD,MAAM,cAAc,GAAG,CAAC,OAAe,wCAAoB,EAAE,EAAE;IACpE,OAAO,kBAAkB,IAAI,EAAE,CAAC;AAClC,CAAC,CAAC;AAFW,QAAA,cAAc,kBAEzB"}
