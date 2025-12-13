@@ -24,12 +24,15 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
     "@libsql/client": "^0.14.0",
     "@nestjs/common": "^11.1.9",
     "@nestjs/core": "^11.1.9",
     "@nestjs/platform-express": "^11.0.0",
+    "@types/pg": "^8.16.0",
     "better-sqlite3": "^11.7.2",
     "drizzle-orm": "^0.45.1",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

@@ -2,6 +2,7 @@ import type { BetterSQLite3Database } from 'drizzle-orm/better-sqlite3';
 import type { LibSQLDatabase } from 'drizzle-orm/libsql';
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import type { MySql2Database } from 'drizzle-orm/mysql2';
+import type { PgliteDatabase } from 'drizzle-orm/pglite';
 import type { Config } from '@libsql/client';
 import type {
   AnyColumn,
@@ -52,7 +53,7 @@ export type DrizzleDatabase<
   : TType extends 'better-sqlite3'
     ? BetterSQLite3Database<TSchema>
     : TType extends 'postgres'
-      ? NodePgDatabase<TSchema>
+      ? NodePgDatabase<TSchema> | PgliteDatabase<TSchema>
       : TType extends 'mysql'
         ? MySql2Database<TSchema>
         : never;
