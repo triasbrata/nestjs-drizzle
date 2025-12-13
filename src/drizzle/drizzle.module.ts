@@ -1,4 +1,4 @@
-import { Table } from 'drizzle-orm';
+import { AnyTable, Table } from 'drizzle-orm';
 import { DynamicModule, Module } from '@nestjs/common';
 import {
   ConfigurableDrizzleModule,
@@ -9,6 +9,7 @@ import { createProviders } from './utils/create-providers';
 import { getClientToken } from './utils/get-client-token';
 import { createEntityProviders } from './utils/create-entity-providers';
 import { DEFAULT_CLIENT_TOKEN } from './drizzle.constants';
+import { DrizzleDatabaseType, TableFor } from './interfaces';
 
 @Module({})
 export class DrizzleModule extends ConfigurableDrizzleModule {
@@ -33,7 +34,13 @@ export class DrizzleModule extends ConfigurableDrizzleModule {
     };
   }
 
-  static forFeature({ entities, name }: { entities: Table[]; name?: string }) {
+  static forFeature<TType extends DrizzleDatabaseType>({
+    entities,
+    name,
+  }: {
+    entities: TableFor<TType>[];
+    name?: string;
+  }) {
     const entityProviders = createEntityProviders(
       entities,
       name || DEFAULT_CLIENT_TOKEN,

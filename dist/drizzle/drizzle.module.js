@@ -33,7 +33,7 @@ let DrizzleModule = DrizzleModule_1 = class DrizzleModule extends drizzle_module
             exports: [...(root.exports ?? []), (0, get_client_token_1.getClientToken)(options.name)],
         };
     }
-    static forFeature({ entities, name }) {
+    static forFeature({ entities, name, }) {
         const entityProviders = (0, create_entity_providers_1.createEntityProviders)(entities, name || drizzle_constants_1.DEFAULT_CLIENT_TOKEN);
         return {
             module: DrizzleModule_1,

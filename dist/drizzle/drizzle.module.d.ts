@@ -1,6 +1,6 @@
-import { Table } from 'drizzle-orm';
 import { DynamicModule } from '@nestjs/common';
 import { ConfigurableDrizzleModule, ASYNC_OPTIONS_TYPE, OPTIONS_TYPE } from './drizzle.module-definitions';
+import { DrizzleDatabaseType, TableFor } from './interfaces';
 export declare class DrizzleModule extends ConfigurableDrizzleModule {
     static forRoot(options: typeof OPTIONS_TYPE): {
         providers: (import("@nestjs/common").Provider | {
@@ -15,8 +15,8 @@ export declare class DrizzleModule extends ConfigurableDrizzleModule {
         controllers?: import("@nestjs/common").Type<any>[];
     };
     static forRootAsync(options: typeof ASYNC_OPTIONS_TYPE): DynamicModule;
-    static forFeature({ entities, name }: {
-        entities: Table[];
+    static forFeature<TType extends DrizzleDatabaseType>({ entities, name, }: {
+        entities: TableFor<TType>[];
         name?: string;
     }): {
         module: typeof DrizzleModule;
