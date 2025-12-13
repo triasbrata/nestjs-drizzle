@@ -14,9 +14,9 @@ import { urls } from 'src/database/url.entity';
 export class UrlService {
   constructor(
     @InjectClient(DBS.LOCAL)
-    private readonly drizzleLocal: DrizzleDatabase<'sqlite', Schema>,
+    private readonly drizzleLocal: DrizzleDatabase<'postgres', Schema>,
     @InjectClient(DBS.TURSO)
-    private readonly drizzleTurso: DrizzleDatabase<'sqlite', Schema>,
+    private readonly drizzleTurso: DrizzleDatabase<'postgres', Schema>,
 
     @InjectRepository(urls, DBS.LOCAL)
     private readonly urlLocalRepository: DrizzleRepository<

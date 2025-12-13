@@ -7,8 +7,10 @@ export declare const ConfigurableDrizzleModule: import("@nestjs/common").Configu
     name: string;
 }>, OPTIONS_TYPE: {
     type: import("./interfaces").DrizzleDatabaseType;
-    schema: Record<string, import("drizzle-orm").Table>;
-} & import("@libsql/core/api").Config & Partial<{
+    schema: {
+        [x: string]: import("drizzle-orm/sqlite-core").AnySQLiteTable | import("drizzle-orm/pg-core").AnyPgTable | import("drizzle-orm/mysql-core").AnyMySqlTable;
+    };
+} & import("@libsql/client/.").Config & Partial<{
     isGlobal: boolean;
     name: string;
 }>;

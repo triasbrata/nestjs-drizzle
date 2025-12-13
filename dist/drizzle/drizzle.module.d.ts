@@ -5,7 +5,7 @@ export declare class DrizzleModule extends ConfigurableDrizzleModule {
     static forRoot(options: typeof OPTIONS_TYPE): {
         providers: (import("@nestjs/common").Provider | {
             provide: string;
-            useFactory: (options: import("./interfaces").DrizzleModuleOptions) => import("./interfaces").DrizzleDatabase<typeof options.type, typeof options.schema>;
+            useFactory: (options: import("./interfaces").DrizzleModuleOptions) => import("./interfaces").DrizzleDatabase<typeof options.type>;
             inject: (string | symbol)[];
         })[];
         exports: (string | symbol | Function | import("@nestjs/common").ForwardReference<any> | DynamicModule | import("@nestjs/common").ClassProvider<any> | import("@nestjs/common").ValueProvider<any> | import("@nestjs/common").FactoryProvider<any> | import("@nestjs/common").ExistingProvider<any>)[];

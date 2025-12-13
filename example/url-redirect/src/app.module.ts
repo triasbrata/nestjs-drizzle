@@ -9,16 +9,16 @@ import { UrlModule } from './url/url.module';
 @Module({
   imports: [
     DrizzleModule.forRoot({
-      type: 'sqlite',
+      type: 'postgres',
       name: DBS.LOCAL,
-      url: 'file:url.db',
+      url: 'lite:url.db1',
       schema,
     }),
     DrizzleModule.forRootAsync({
       name: DBS.TURSO,
       useFactory: (tursoConfig: TursoConfig) => {
         return {
-          type: 'sqlite',
+          type: 'postgres',
           url: tursoConfig.databaseUrl!,
           authToken: tursoConfig.authToken!,
           schema,
