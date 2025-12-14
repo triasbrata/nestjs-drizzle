@@ -8,7 +8,7 @@ export declare class DrizzleModule extends ConfigurableDrizzleModule {
             useFactory: (options: import("./interfaces").DrizzleModuleOptions) => import("./interfaces").DrizzleDatabase<typeof options.type>;
             inject: (string | symbol)[];
         })[];
-        exports: (string | symbol | Function | import("@nestjs/common").ForwardReference<any> | DynamicModule | import("@nestjs/common").ClassProvider<any> | import("@nestjs/common").ValueProvider<any> | import("@nestjs/common").FactoryProvider<any> | import("@nestjs/common").ExistingProvider<any>)[];
+        exports: (string | symbol | Function | DynamicModule | import("@nestjs/common").ForwardReference<any> | import("@nestjs/common").ClassProvider<any> | import("@nestjs/common").ValueProvider<any> | import("@nestjs/common").FactoryProvider<any> | import("@nestjs/common").ExistingProvider<any>)[];
         module: import("@nestjs/common").Type<any>;
         global?: boolean;
         imports?: Array<import("@nestjs/common").Type<any> | DynamicModule | Promise<DynamicModule> | import("@nestjs/common").ForwardReference>;

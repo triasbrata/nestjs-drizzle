@@ -16,18 +16,25 @@ const createProviders = (name) => [
         useFactory: (options) => {
             const { type, schema, ...connectionConfig } = options;
             switch (type) {
-                case 'sqlite': {
+                case "sqlite": {
                     const client = (0, client_1.createClient)(connectionConfig);
                     return (0, libsql_1.drizzle)(client, { schema });
                 }
-                case 'better-sqlite3': {
+                case "better-sqlite3": {
                     return (0, better_sqlite3_1.drizzle)(connectionConfig, {
                         schema,
                     });
                 }
-                case 'postgres': {
-                    if (options.url?.startsWith('lite:')) {
-                        const pool = new pglite_1.PGlite({});
+                case "postgres": {
+                    if (options.url?.startsWith("pglite:")) {
+                        const match = options.url.match(/^pglite:(.*)$/);
+                        const dbOptions = {};
+                        if (match) {
+                            if (match[0]) {
+                                dbOptions.dataDir = match[0];
+                            }
+                        }
+                        const pool = new pglite_1.PGlite(dbOptions);
                         const client = (0, pglite_2.drizzle)({
                             client: pool,
                         });
