@@ -27,13 +27,7 @@ const createProviders = (name) => [
                 }
                 case "postgres": {
                     if (options.url?.startsWith("pglite:")) {
-                        const match = options.url.match(/^pglite:(.*)$/);
-                        const dbOptions = {};
-                        if (match) {
-                            if (match[0]) {
-                                dbOptions.dataDir = match[0];
-                            }
-                        }
+                        const dbOptions = extractDbOptions(options.url);
                         const pool = new pglite_1.PGlite(dbOptions);
                         const client = (0, pglite_2.drizzle)({
                             client: pool,
@@ -51,6 +45,17 @@ const createProviders = (name) => [
                 default: {
                     throw new Error(`Unsupported database type: ${type}`);
                 }
+            }
+            function extractDbOptions(url) {
+                const match = url.match(/^pglite:(.*)$/);
+                const dbOptions = {};
+                if (!match) {
+                    return dbOptions;
+                }
+                if (match.length >= 2 && match[1]) {
+                    dbOptions.dataDir = match[1];
+                }
+                return dbOptions;
             }
         },
         inject: [drizzle_module_definitions_1.DRIZZLE_OPTIONS_TOKEN],
